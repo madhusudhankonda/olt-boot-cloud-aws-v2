@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.*;
 
@@ -16,7 +18,10 @@ public class SQSManager implements CommandLineRunner {
 
     @Bean
     private SqsClient sqlClient(){
-        return SqsClient.builder().build();
+        return SqsClient.builder()
+                .region(Region.EU_WEST_2)
+                .credentialsProvider(ProfileCredentialsProvider.create("default"))
+                .build();
     }
     private void createQueue(String qName){
         CreateQueueRequest queueRequest = CreateQueueRequest.builder()
